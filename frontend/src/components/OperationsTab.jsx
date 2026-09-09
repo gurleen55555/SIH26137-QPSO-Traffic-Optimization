@@ -102,7 +102,11 @@ export default function OperationsTab({
                   </span>
                 </div>
                 <div className="vehicle-route-seq">
-                  {Array.isArray(v.stops) ? v.stops.join(' ➔ ') : `Node 0 ➔ Node ${v.id * 15} ➔ Node 0`}
+                  {Array.isArray(v.stops)
+                    ? v.stops.join(' ➔ ')
+                    : Array.isArray(v.route_node_ids) && v.route_node_ids.length > 0
+                    ? v.route_node_ids.map(id => `Node ${id}`).join(' ➔ ')
+                    : `Node 0 ➔ Node ${((v.vehicle_id || v.id || idx + 1) * 3)} ➔ Node 0`}
                 </div>
               </div>
             ))}

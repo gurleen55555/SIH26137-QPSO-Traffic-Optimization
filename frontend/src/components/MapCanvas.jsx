@@ -4,7 +4,9 @@ import { useJsApiLoader, GoogleMap, Polyline as GooglePolyline, Marker as Google
 
 const VEHICLE_COLORS = ['#00e5ff', '#ffb300', '#00e676', '#d500f9', '#ff6e40']
 const CENTER = { lat: 12.9716, lng: 77.5946 }
-const DARK_TILE = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+const DARK_TILE = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'
+const OSM_TILE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+
 
 const GOOGLE_MAP_DARK_STYLES = [
   { elementType: 'geometry', stylers: [{ color: '#0d1322' }] },
@@ -169,7 +171,11 @@ export default function MapCanvas({
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <MapContainer center={[CENTER.lat, CENTER.lng]} zoom={14} style={{ height: '100%', width: '100%' }}>
-        <TileLayer attribution='&copy; <a href="https://carto.com/">CARTO</a>' url={DARK_TILE} />
+        <TileLayer
+          attribution='&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
+          url={DARK_TILE}
+          className="dark-map-tiles"
+        />
 
         {leafletBounds.length >= 2 && <LeafletFitBounds bounds={leafletBounds} />}
 

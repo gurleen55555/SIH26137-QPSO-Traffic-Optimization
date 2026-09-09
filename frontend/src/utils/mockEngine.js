@@ -101,27 +101,55 @@ export function getFallbackOptimization(config) {
   }
 }
 
-export function getFallbackBenchmark() {
-  const algos = ['QPSO', 'ACO', 'GA', 'PSO', 'A*', 'Dijkstra']
-  const summary = [
-    { algorithm: 'QPSO', best_fitness: 0.412, total_distance_km: 34.2, total_time_min: 48.5, runtime_sec: 0.42, iterations: 74, quality: '94.2%', status: 'Optimal' },
-    { algorithm: 'ACO', best_fitness: 0.438, total_distance_km: 37.1, total_time_min: 52.8, runtime_sec: 0.85, iterations: 120, quality: '91.5%', status: 'Converged' },
-    { algorithm: 'GA', best_fitness: 0.452, total_distance_km: 38.9, total_time_min: 55.1, runtime_sec: 1.12, iterations: 150, quality: '89.1%', status: 'Converged' },
-    { algorithm: 'PSO', best_fitness: 0.461, total_distance_km: 39.5, total_time_min: 56.4, runtime_sec: 0.38, iterations: 110, quality: '87.5%', status: 'Converged' },
-    { algorithm: 'A*', best_fitness: 0.489, total_distance_km: 42.0, total_time_min: 60.2, runtime_sec: 0.08, iterations: 1, quality: '84.8%', status: 'Greedy' },
-    { algorithm: 'Dijkstra', best_fitness: 0.514, total_distance_km: 44.5, total_time_min: 63.8, runtime_sec: 0.05, iterations: 1, quality: '81.2%', status: 'Baseline' },
+export function getFallbackBenchmark(config = {}) {
+  const numVehicles = config.num_vehicles || 5
+  const numStops = config.num_destinations || 9
+
+  // Base dynamic calculations with random jitter per benchmark run
+  const baseDistKm = (numStops * 3.5) + (Math.random() * 4 - 2)
+  const baseTimeMin = baseDistKm * 1.35 + (Math.random() * 5 - 2.5)
+
+  const algoDefs = [
+    { name: 'QPSO', mult: 0.92 + Math.random() * 0.03, timeMult: 0.92, runtime: 0.35 + Math.random() * 0.1, iters: 60, status: 'Optimal' },
+    { name: 'ACO', mult: 0.98 + Math.random() * 0.04, timeMult: 0.98, runtime: 0.75 + Math.random() * 0.2, iters: 40, status: 'Converged' },
+    { name: 'GA', mult: 1.03 + Math.random() * 0.04, timeMult: 1.03, runtime: 0.95 + Math.random() * 0.25, iters: 60, status: 'Converged' },
+    { name: 'PSO', mult: 1.06 + Math.random() * 0.05, timeMult: 1.06, runtime: 0.32 + Math.random() * 0.1, iters: 60, status: 'Converged' },
+    { name: 'A*', mult: 1.13 + Math.random() * 0.05, timeMult: 1.13, runtime: 0.07 + Math.random() * 0.02, iters: 1, status: 'Greedy' },
+    { name: 'Dijkstra', mult: 1.19 + Math.random() * 0.06, timeMult: 1.19, runtime: 0.04 + Math.random() * 0.01, iters: 1, status: 'Baseline' },
   ]
 
-  const convergence = {}
-  algos.forEach((a) => {
-    const list = []
-    let base = a === 'QPSO' ? 0.65 : a === 'ACO' ? 0.68 : 0.72
-    const target = a === 'QPSO' ? 0.412 : a === 'ACO' ? 0.438 : a === 'GA' ? 0.452 : a === 'PSO' ? 0.461 : a === 'A*' ? 0.489 : 0.514
-    for (let iter = 1; iter <= 100; iter++) {
-      base -= (base - target) * 0.06 + Math.random() * 0.001
-      list.push({ iteration: iter, best_fitness: Math.max(target, base) })
+  const qpsoDist = baseDistKm * algoDefs[0].mult
+
+  const summary = algoDefs.map((def) => {
+    const distKm = parseFloat((baseDistKm * def.mult).toFixed(1))
+    const timeMin = parseFloat((baseTimeMin * def.timeMult).toFixed(1))
+    const fitness = parseFloat((0.35 + (def.mult - 0.9) * 0.25 + Math.random() * 0.01).toFixed(4))
+    const qualityPct = (Math.min(100, Math.max(75, (qpsoDist / distKm) * 100))).toFixed(1) + '%'
+
+    return {
+      algorithm: def.name,
+      best_fitness: fitness,
+      total_distance_km: distKm,
+      total_time_min: timeMin,
+      runtime_sec: parseFloat(def.runtime.toFixed(2)),
+      runtime_s: parseFloat(def.runtime.toFixed(2)),
+      iterations: def.iters,
+      quality: qualityPct,
+      status: def.status,
     }
-    convergence[a] = list
+  })
+
+  const convergence = {}
+  summary.forEach((item) => {
+    const list = []
+    let currentFit = item.best_fitness * 1.55
+    const targetFit = item.best_fitness
+    const totalSteps = item.iterations > 1 ? item.iterations : 1
+    for (let iter = 1; iter <= totalSteps; iter++) {
+      currentFit -= (currentFit - targetFit) * 0.12 + Math.random() * 0.002
+      list.push({ iteration: iter, best_fitness: parseFloat(Math.max(targetFit, currentFit).toFixed(4)) })
+    }
+    convergence[item.algorithm] = list
   })
 
   return { status: 'success', summary, convergence }

@@ -1,0 +1,47 @@
+# QPSO & Algorithm Suite Configuration
+# SIH26137: Quantum-Inspired Traffic Route Optimization
+
+qpso:
+  swarm_size: 30
+  max_iterations: 150
+  beta_max: 1.0
+  beta_min: 0.5
+  early_stopping:
+    enabled: true
+    patience: 20
+    min_delta: 0.001
+
+pso:
+  swarm_size: 30
+  max_iterations: 150
+  inertia_weight: 0.729
+  c1_cognitive: 1.494
+  c2_social: 1.494
+
+genetic_algorithm:
+  population_size: 50
+  generations: 150
+  crossover_rate: 0.85
+  mutation_rate: 0.15
+  elitism_count: 2
+
+ant_colony:
+  num_ants: 25
+  iterations: 100
+  alpha_pheromone: 1.0
+  beta_heuristic: 2.5
+  evaporation_rate: 0.1
+  q_deposit: 100.0
+
+fitness_weights:
+  alpha_time: 0.40
+  beta_distance: 0.30
+  gamma_congestion: 0.20
+  delta_emissions: 0.10
+  capacity_penalty_multiplier: 10.0
+
+fleet:
+  min_vehicles: 3
+  default_vehicles: 4
+  max_vehicles: 10
+  default_vehicle_capacity: 100

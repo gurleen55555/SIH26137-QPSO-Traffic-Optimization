@@ -13,9 +13,10 @@ function App() {
   const [role, setRole] = useState('operator')
   const [isDark, setIsDark] = useState(true)
 
-  // Map Engine state
-  const [mapProvider, setMapProvider] = useState('google')
-  const [apiKey, setApiKey] = useState(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '')
+  // Map Engine state — default to Leaflet for instant clean rendering without key requirement
+  const envApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''
+  const [mapProvider, setMapProvider] = useState(envApiKey ? 'google' : 'leaflet')
+  const [apiKey, setApiKey] = useState(envApiKey)
 
   const [status, setStatus] = useState('idle') // idle | running | success | error
   const [routes, setRoutes] = useState(null)

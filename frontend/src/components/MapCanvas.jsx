@@ -33,7 +33,7 @@ function LeafletFitBounds({ bounds }) {
 export default function MapCanvas({
   graphData,
   routes,
-  mapProvider = 'google',
+  mapProvider = 'leaflet',
   apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
 }) {
   const [activeMarker, setActiveMarker] = useState(null)
@@ -87,7 +87,7 @@ export default function MapCanvas({
   // Google Maps JS API loader
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: apiKey,
+    googleMapsApiKey: apiKey || 'DUMMY_KEY', // prevent script error if empty
   })
 
   const useGoogleMap = mapProvider === 'google' && apiKey && isLoaded && !loadError
@@ -168,26 +168,6 @@ export default function MapCanvas({
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      {mapProvider === 'google' && !apiKey && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 10,
-            left: 10,
-            zIndex: 1000,
-            background: 'rgba(15, 23, 42, 0.9)',
-            border: '1px solid var(--accent-amber)',
-            color: 'var(--accent-amber)',
-            padding: '6px 12px',
-            borderRadius: '8px',
-            fontSize: '0.75rem',
-            pointerEvents: 'none',
-          }}
-        >
-          💡 Using Dark Leaflet map. Add Google Maps API Key in control panel to switch to Google Maps.
-        </div>
-      )}
-
       <MapContainer center={[CENTER.lat, CENTER.lng]} zoom={14} style={{ height: '100%', width: '100%' }}>
         <TileLayer attribution='&copy; <a href="https://carto.com/">CARTO</a>' url={DARK_TILE} />
 

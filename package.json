@@ -1,0 +1,11 @@
+{
+  "name": "sih26137-qpso-traffic-optimization",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SIH 2026 PS 137 — Quantum-Inspired Traffic & Route Optimization Control System",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "cd frontend && npm run dev",
+    "preview": "cd frontend && npm run preview"
+  }
+}

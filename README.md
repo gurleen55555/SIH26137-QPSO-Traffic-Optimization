@@ -210,17 +210,6 @@ SIH26137-QPSO-Traffic-Optimization/
 
 ---
 
-## 👥 Team & Task Allocation (15-Day Sprint)
-
-| Member | Role | Key Deliverables | Focus Areas |
-|:---:|:---:|:---|:---|
-| **M1** | **ALGO Lead** | `algos/qpso.py`, `pso.py`, `vrp_formulator.py` | QPSO core, delta well sampling, MBEST, parameter validation |
-| **M2** | **DATA Lead** | `data/osm_loader.py`, `traffic_updater.py`, `backend/db/` | Bengaluru OSMnx graph, PostGIS models, traffic simulator, Redis |
-| **M3** | **ML / Benchmarks** | `algos/classical/`, `convergence_analyzer.py` | GA, ACO, Dijkstra/A*, statistical hypothesis testing, speedup tables |
-| **M4** | **STACK Lead** | `backend/`, `infra/`, Docker Compose | FastAPI REST/WebSocket, live event streaming, fault recovery, deployment |
-| **M5** | **VIZ Lead** | `frontend/`, React, Leaflet, D3.js | Interactive map, vehicle playback, D3 convergence charts, scenario injector |
-
----
 
 ## 📊 Benchmark Suite Comparison Matrix
 

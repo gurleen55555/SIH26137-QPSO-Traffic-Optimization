@@ -26,3 +26,9 @@ dist/
 
 # Vercel
 .vercel
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OSMnx / cache
+cache/

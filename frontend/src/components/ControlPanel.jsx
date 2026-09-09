@@ -63,23 +63,39 @@ export default function ControlPanel({
           value={mapProvider}
           onChange={(e) => setMapProvider(e.target.value)}
         >
+          <option value="leaflet">🌐 Dark Vector Leaflet (Offline / Carto)</option>
           <option value="google">🗺️ Google Maps JavaScript API</option>
-          <option value="leaflet">🌐 Dark Vector Leaflet (Offline/Carto)</option>
         </select>
       </div>
 
+      {/* API Key Box with Styled Glass Background */}
       {mapProvider === 'google' && (
-        <div className="form-group">
-          <label>Google Maps API Key</label>
+        <div
+          className="form-group"
+          style={{
+            background: 'rgba(0, 229, 255, 0.06)',
+            border: '1px solid rgba(0, 229, 255, 0.25)',
+            borderRadius: '10px',
+            padding: '12px',
+            boxShadow: '0 4px 12px rgba(0, 229, 255, 0.08)',
+          }}
+        >
+          <label style={{ color: 'var(--accent-cyan)', fontWeight: '700' }}>
+            🔑 Google Maps API Key
+          </label>
           <input
             type="password"
             className="form-control"
             placeholder="AIzaSy... (Enter API Key)"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
+            style={{
+              background: 'rgba(15, 23, 42, 0.9)',
+              borderColor: 'rgba(0, 229, 255, 0.3)',
+            }}
           />
-          <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Leave blank to use Leaflet dark tiles fallback
+          <div style={{ fontSize: '0.68rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+            ✨ Custom Google Maps styling enabled. Blank defaults to Dark Leaflet tiles.
           </div>
         </div>
       )}

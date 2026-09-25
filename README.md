@@ -292,6 +292,109 @@ npm run dev
 
 ---
 
+---
+
+## 🔬 M1 — QPSO Development, Validation & Scalability
+
+### M1 Scope
+
+M1 focuses on the QPSO optimization engine, multi-vehicle route formulation,
+multi-objective fitness evaluation, QPSO validation, and scalability testing
+on the Bengaluru road-network dataset.
+
+### QPSO Configuration
+
+| Parameter | Value |
+|---|---:|
+| Number of particles | 25 |
+| Maximum iterations | 200 |
+| β maximum | 1.0 |
+| β minimum | 0.5 |
+| Vehicles | 5 |
+| Destinations | 8 |
+| Particle dimensions | 12 |
+
+### Multi-Objective Fitness
+
+The implemented fitness function follows the objective weights defined in the PRD.
+
+| Objective | Weight |
+|---|---:|
+| Travel time | 0.40 |
+| Distance | 0.30 |
+| Congestion | 0.20 |
+| Emissions | 0.10 |
+
+Each objective is normalized to the range [0, 1] before the weighted fitness
+is calculated.
+
+### M1 Implementation
+
+The M1 QPSO implementation includes:
+
+- Continuous particle representation for multi-vehicle routing
+- Destination ordering and route decoding
+- Five-vehicle routing support
+- Route evaluation on the Bengaluru road network
+- Dynamic traffic-weight evaluation
+- Multi-objective normalized fitness calculation
+- Personal-best and global-best tracking
+- MBEST calculation
+- Quantum position update using the logarithmic sampling term `ln(1/u)`
+- Contraction-expansion parameter β decay
+- Convergence history tracking
+
+### QPSO Validation
+
+QPSO was tested on the Bengaluru road-network dataset using the five-vehicle
+routing configuration and the PRD-defined multi-objective fitness function.
+
+A matched-seed comparison with standard PSO was also performed using 10 seeds
+under the same tested routing setup.
+
+| Metric | QPSO | PSO |
+|---|---:|---:|
+| Mean fitness | 0.14833190 | 0.15687216 |
+| Standard deviation | 0.00088014 | 0.00105878 |
+
+In this experiment, QPSO achieved a lower final fitness value than PSO for all
+10 matched seeds. The mean fitness obtained by QPSO was approximately 5.44%
+lower than the PSO mean fitness.
+
+These results describe the observed behavior on the tested Bengaluru routing
+instance and are not treated as a universal claim about QPSO performance.
+
+### Scalability Testing
+
+QPSO was additionally tested on Bengaluru graph configurations of different
+sizes.
+
+| Graph | Particles | Iterations | Runtime | Best Fitness |
+|---|---:|---:|---:|---:|
+| 600-node test graph | 25 | 150 | 32.23 s | 0.147756 |
+| 800-node graph | 25 | 200 | 46.19 s | 0.147756 |
+
+The 600-node test completed in 32.23 seconds, which is slightly above the
+30-second performance risk threshold identified in the PRD. The PRD identifies
+zone partitioning, swarm capping, iteration limits with early stopping, and
+warm-starting as possible mitigation strategies for this risk.
+
+### M1 Observations
+
+The current M1 implementation successfully performs multi-vehicle QPSO routing
+on the Bengaluru road-network dataset while incorporating dynamic traffic
+weights and the PRD-defined multi-objective fitness formulation.
+
+The QPSO-vs-PSO experiment showed lower final fitness for QPSO across all
+10 matched seeds in the tested configuration. The implementation also scales
+from the 600-node test graph to the 800-node Bengaluru graph, with runtime
+increasing as graph size and optimization iterations increase.
+
+Broader algorithm benchmarking and statistical comparison across the benchmark
+suite remain part of the benchmark work assigned to M3.
+
+---
+
 ## 📖 Complete Documentation References
 
 - 📋 [**Product Requirements Document (PRD.md)**](file:///Users/aditrisingh/SIH26137-QPSO-Traffic-Optimization/docs/PRD.md) — 48KB exhaustive functional requirements, evaluator scoring criteria, risk register, and day-by-day plan.
